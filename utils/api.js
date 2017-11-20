@@ -1,10 +1,13 @@
 import { AsyncStorage } from 'react-native'
+import {formatDeckResults} from "./_decks";
+export const FLASHCARDS_STORAGE_KEY = 'FlashCards:decks'
 
 export function getDecks () {
-  return null;
+  return AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY)
+    .then(formatDeckResults)
 }
 
-export function getDeck () {
+export function getDeck (title) {
   return null;
 }
 
