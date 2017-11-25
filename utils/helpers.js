@@ -7,6 +7,7 @@ import { Notifications, Permissions } from 'expo'
 export function getDeckInfo (deck) {
   const info = {
     React: {
+      id : 1,
       title: 'React',
       questions: [
         {
@@ -20,6 +21,7 @@ export function getDeckInfo (deck) {
       ]
     },
     JavaScript: {
+      id:2,
       title: 'JavaScript',
       questions: [
         {

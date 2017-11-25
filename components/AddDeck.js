@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, Platform,TextInput } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import TextButton from './TextButton'
 // import { submitEntry, removeEntry } from '../utils/api' import api helpers for decks
@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { addDeck } from '../actions'
 import { purple, white } from '../utils/colors'
 import { NavigationActions } from 'react-navigation'
+import {saveDeckTitle} from "../utils/api";
 
 function SubmitBtn ({ onPress }) {
   return (
@@ -18,11 +19,24 @@ function SubmitBtn ({ onPress }) {
   )
 }
 class AddDeck extends Component {
+  state = {
+    title: '',
+  }
   submit = () => {
-    //Go to home to reload all the new decks added
-    this.toHome()
-
     //Submit deck from api
+    const {title} = this.state;
+    let deck = {
+      title,
+      questions:[]
+    }
+
+    this.props.dispatch(addDeck({
+      [title]: deck
+    }))
+    saveDeckTitle({deck,title})
+
+    //Go to home to reload all the new decks added
+    this.toHome();
   }
   toHome = () => {
     this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
@@ -31,8 +45,14 @@ class AddDeck extends Component {
     return (
       <View style={styles.container}>
         <Text>
-          Logic to add a deck :)
+          What is the title of your new deck??
         </Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(title) => this.setState({title})}
+          value={this.state.title}
+          placeholder="Deck Title"
+        />
         <SubmitBtn onPress={this.submit} />
       </View>
     )

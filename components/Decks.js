@@ -32,29 +32,35 @@ class Decks extends Component {
     )
   }
 
+
   render() {
     const {ready} = this.state;
     const {decks} = this.props;
     const keys = Object.keys(decks);
-    console.log("keys");
-    console.log(keys);
     if (ready === false) {
       return <AppLoading/>
     }
     return (
-
-      <View style={styles.item}>
+      <View>
         {
-          keys.map((val,index)=>(
-            <Text key={index}>
-              {decks[val]['title']}
-              Here we should list all the decks don't you think??
-              questions
-              {decks[val]['questions'].length}
-            </Text>
+          keys.map((val, index) => (
+            <TouchableOpacity key={index} onPress={() =>
+              this.props.navigation.navigate(
+                'DeckDetail',
+                {deckId: decks[val]['title']}
+              )
+            }>
+              <View style={styles.item}>
+                <Text>
+                  {decks[val]['title']}
+                </Text>
+                <Text>
+                  Questions : {decks[val]['questions'].length}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ))
         }
-
       </View>
     )
   }

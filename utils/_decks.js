@@ -7,6 +7,13 @@ export function formatDeckResults (results) {
     ? setDummyData()
     : JSON.parse(results)
 }
+
+export function formatGetDeckResult (item,results){
+  let parsedResult = JSON.parse(results);
+  return parsedResult[item]?parsedResult[item]:null;
+
+}
+
 function setDummyData () {
 
   let dummyData = getDeckInfo()
