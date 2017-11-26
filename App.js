@@ -76,7 +76,7 @@ const MainNavigator = StackNavigator({
       }
     }
   },
-  addCard: {
+  AddCard: {
     screen: AddCard,
     navigationOptions: {
       headerTintColor: white,

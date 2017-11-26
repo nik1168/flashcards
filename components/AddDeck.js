@@ -1,14 +1,19 @@
-import React, { Component } from 'react'
-import { View, TouchableOpacity, Text, StyleSheet, Platform,TextInput } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import TextButton from './TextButton'
-// import { submitEntry, removeEntry } from '../utils/api' import api helpers for decks
-import { connect } from 'react-redux'
-import { addDeck } from '../actions'
-import { purple, white } from '../utils/colors'
-import { NavigationActions } from 'react-navigation'
+import React, {Component} from 'react';
+import {View, TouchableOpacity, Text, StyleSheet, Platform, TextInput} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
+import TextButton from './TextButton';
+import {connect} from 'react-redux';
+import {addDeck} from '../actions';
+import {purple, white} from '../utils/colors';
+import {NavigationActions} from 'react-navigation';
 import {saveDeckTitle} from "../utils/api";
 
+/**
+ * Submit button component
+ * @param onPress
+ * @returns {XML}
+ * @constructor
+ */
 function SubmitBtn ({ onPress }) {
   return (
     <TouchableOpacity
@@ -18,29 +23,43 @@ function SubmitBtn ({ onPress }) {
     </TouchableOpacity>
   )
 }
+
+/**
+ * Add Deck Component
+ */
 class AddDeck extends Component {
   state = {
     title: '',
-  }
+  };
+
+  /**
+   * Submit new deck
+   */
   submit = () => {
+    const {dispatch} = this.props; //get dispatch from props
     //Submit deck from api
     const {title} = this.state;
     let deck = {
       title,
       questions:[]
-    }
-
-    this.props.dispatch(addDeck({
-      [title]: deck
-    }))
+    };
     saveDeckTitle({deck,title})
+      .then(() => {
+        dispatch(addDeck({
+          [title]: deck
+        }));
+        //Go to home to reload all the new decks added
+        this.toHome();
+      })
+  };
 
-    //Go to home to reload all the new decks added
-    this.toHome();
-  }
+  /**
+   * Go to decks
+   */
   toHome = () => {
     this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
-  }
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -101,8 +120,13 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
-})
+});
 
+/**
+ * Map state to props
+ * @param state
+ * @returns {{foo: string}}
+ */
 function mapStateToProps (state) {
   return {
     foo: 'foo'

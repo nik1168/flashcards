@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { View, Text, StyleSheet,TouchableOpacity,Platform } from 'react-native'
-import { connect } from 'react-redux'
-import TextButton from './TextButton'
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {connect} from 'react-redux';
+import TextButton from './TextButton';
 import {getDeck} from "../utils/api";
 import {getSingleDeck} from "../actions/index";
 import {purple,white} from "../utils/colors";
@@ -21,18 +21,28 @@ class DeckDetail extends Component {
   //   const {dispatch,deckId,dispatch} = this.props;
   //   getDeck().then((deck)=>dispatch(getSingleDeck(deck)))
   // }
-
+  addCard = () => {
+    let {deck} = this.props;
+    this.props.navigation.navigate(
+      'AddCard',
+      {title: deck.title}
+    )
+  };
+  startQuiz = () => {
+    console.log("start quiz");
+  };
   static navigationOptions = ({ navigation }) => {
-    const { deckId } = navigation.state.params
+    const {deckId} = navigation.state.params;
     return {
       title: deckId+''
     }
-  }
+  };
   reset = () => {
-  }
-  shouldComponentUpdate (nextProps) {
-    // return nextProps.metrics !== null && !nextProps.metrics.today
-  }
+
+  };
+  // shouldComponentUpdate (nextProps) {
+  //   // return nextProps.metrics !== null && !nextProps.metrics.today
+  // }
   render() {
    let {deck} = this.props;
     return (
@@ -47,10 +57,10 @@ class DeckDetail extends Component {
             </Text>
           )
         }
-        <Btn onPress={this.submit} text="Add Card" />
+        <Btn onPress={this.addCard} text="Add Card"/>
         {
           deck.questions.length > 0 && (
-            <Btn onPress={this.submit} text="Start Quiz" />
+            <Btn onPress={this.startQuiz} text="Start Quiz"/>
           )
         }
       </View>
@@ -100,23 +110,20 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   }
-})
+});
 
 submit = () => {
   //Go to home to reload all the new decks added
   this.toHome()
 
   //Submit deck from api
-}
+};
 toHome = () => {
   this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
-}
+};
 
 function mapStateToProps (state, { navigation }) {
   const { deckId } = navigation.state.params;
-  console.log("state");
-  console.log(state);
-
   return {
     deck : state[deckId]
   }

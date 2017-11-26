@@ -7,7 +7,7 @@ import { AppLoading} from 'expo'
 class Quiz extends Component {
   state = {
     ready: true,
-  }
+  };
   componentDidMount () {
   }
   renderItem = () => (

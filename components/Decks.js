@@ -1,42 +1,38 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native'
-import {connect} from 'react-redux'
-import {white} from '../utils/colors'
-import {AppLoading} from 'expo'
-import {getDecks} from "../utils/api";
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
+import {white} from '../utils/colors';
+import {AppLoading} from 'expo';
+import {getDecks, clearStorage} from "../utils/api";
 import {receiveDecks} from "../actions/index";
 
 class Decks extends Component {
+  //Component's state
   state = {
     ready: true,
-  }
+  };
 
+  /**
+   * Logic when component mounts
+   */
   componentDidMount() {
-    const {dispatch} = this.props
-    getDecks()
+    const {dispatch} = this.props; //get dispatch from props
+    getDecks() //Get decks from storage and dispatch action for Redux
       .then((decks) => dispatch(receiveDecks(decks)))
+      .then(() => this.setState(() => ({ready: true})))
+    //Uncomment to clear all storage, just for testing purposes
+    // clearStorage()
     // fetch all decks
   }
 
-  renderItem = ({today, ...metrics}, formattedDate, key) => (
-    <View style={styles.item}>
-      Render item
-    </View>
-  )
 
-  renderEmptyDate(formattedDate) {
-    return (
-      <View style={styles.item}>
-        Render Empty
-      </View>
-    )
-  }
-
-
+  /**
+   * Render component
+   */
   render() {
     const {ready} = this.state;
-    const {decks} = this.props;
-    const keys = Object.keys(decks);
+    const {decks} = this.props; //decks from storage
+    const keys = Object.keys(decks); //keys from main object
     if (ready === false) {
       return <AppLoading/>
     }
@@ -90,6 +86,11 @@ const styles = StyleSheet.create({
   }
 });
 
+/**
+ * Map state to props
+ * @param decks
+ * @returns {{decks: *}}
+ */
 function mapStateToProps(decks) {
   return {
     decks
