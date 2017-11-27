@@ -1,33 +1,20 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, Platform, TextInput} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import TextButton from './TextButton';
 import {connect} from 'react-redux';
 import {addDeck} from '../actions';
 import {purple, white} from '../utils/colors';
-import {NavigationActions} from 'react-navigation';
 import {saveDeckTitle} from "../utils/api";
-
-/**
- * Submit button component
- * @param onPress
- * @returns {XML}
- * @constructor
- */
-function SubmitBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
-      onPress={onPress}>
-      <Text style={styles.submitBtnText}>SUBMIT</Text>
-    </TouchableOpacity>
-  )
-}
+import SubmitBtn from "./SubmitButton";
 
 /**
  * Add Deck Component
  */
 class AddDeck extends Component {
+  /**
+   * State of component
+   * @type {{title: string}}
+   */
   state = {
     title: '',
   };
@@ -41,23 +28,26 @@ class AddDeck extends Component {
     const {title} = this.state;
     let deck = {
       title,
-      questions:[]
+      questions: []
     };
-    saveDeckTitle({deck,title})
+    saveDeckTitle({deck, title})
       .then(() => {
         dispatch(addDeck({
           [title]: deck
         }));
-        //Go to home to reload all the new decks added
-        this.toHome();
+        //Go to deck detail
+        this.toDeck(title);
       })
   };
 
   /**
-   * Go to decks
+   * Go to deck detail based on a title
    */
-  toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
+  toDeck = (title) => {
+    this.props.navigation.navigate(
+      'DeckDetail',
+      {deckId: title}
+    )
   };
 
   render() {
@@ -72,7 +62,7 @@ class AddDeck extends Component {
           value={this.state.title}
           placeholder="Deck Title"
         />
-        <SubmitBtn onPress={this.submit} />
+        <SubmitBtn onPress={this.submit}/>
       </View>
     )
   }
@@ -127,7 +117,7 @@ const styles = StyleSheet.create({
  * @param state
  * @returns {{foo: string}}
  */
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     foo: 'foo'
   }

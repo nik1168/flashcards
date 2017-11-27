@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View,Platform, StatusBar } from 'react-native'
-import configureStore from './store/configureStore'
-import { Provider } from 'react-redux'
-import { TabNavigator, StackNavigator } from 'react-navigation'
-import { purple, white } from './utils/colors'
-import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import { Constants } from 'expo'
+import {StyleSheet, Text, View, Platform, StatusBar} from 'react-native';
+import configureStore from './store/configureStore';
+import {Provider} from 'react-redux';
+import {TabNavigator, StackNavigator} from 'react-navigation';
+import {purple, white} from './utils/colors';
+import {FontAwesome, Ionicons} from '@expo/vector-icons';
+import {Constants} from 'expo';
 import Decks from "./components/Decks";
 import AddDeck from "./components/AddDeck";
 import DeckDetail from "./components/DeckDetail";
 import Quiz from "./components/Quiz";
 import AddCard from "./components/AddCard";
+import {setLocalNotification} from "./utils/helpers";
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
     <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
@@ -52,7 +53,7 @@ const Tabs = TabNavigator({
       shadowOpacity: 1
     }
   }
-})
+});
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -67,7 +68,7 @@ const MainNavigator = StackNavigator({
       }
     }
   },
-  quiz: {
+  Quiz: {
     screen: Quiz,
     navigationOptions: {
       headerTintColor: white,
@@ -85,9 +86,12 @@ const MainNavigator = StackNavigator({
       }
     }
   }
-})
+});
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
   render() {
     return (
       <Provider store={configureStore()}>

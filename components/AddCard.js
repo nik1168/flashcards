@@ -1,26 +1,12 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, Platform, TextInput} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import TextButton from './TextButton';
 import {connect} from 'react-redux';
 import {addCard} from '../actions';
 import {purple, white} from '../utils/colors';
-import {NavigationActions} from 'react-navigation';
 import {addCardToDeck} from "../utils/api";
+import SubmitBtn from "./SubmitButton";
 
-/**
- * @description Handle submit button
- * @param onPress
- */
-function SubmitBtn({onPress}) {
-  return (
-    <TouchableOpacity
-      style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
-      onPress={onPress}>
-      <Text style={styles.submitBtnText}>SUBMIT</Text>
-    </TouchableOpacity>
-  )
-}
 
 /**
  * Add Card
@@ -41,13 +27,15 @@ class AddCard extends Component {
    * Logic to submit card
    */
   submit = () => {
-    let {deck} = this.props;
-    const {question, answer} = this.state;
+    let {deck} = this.props; // Get deck from props
+    const {question, answer} = this.state; //Question and answer from state
     let card = {question, answer};
     addCardToDeck(deck, card)
       .then(() => {
         //Go to home to reload all the new decks added
-        this.props.dispatch(addCard());
+        let send = {deck, card};
+        this.props.dispatch(addCard(send));
+        this.props.navigation.state.params.onGoBack();
         this.toHome()
       })
   };
@@ -57,7 +45,9 @@ class AddCard extends Component {
    */
   toHome = () => {
     const {navigate} = this.props.navigation;
-    navigate('Decks')
+    this.props.navigation.goBack();
+    // this.props.navigation.dispatch(NavigationActions.back())
+    // navigate('Decks')
   };
 
   render() {

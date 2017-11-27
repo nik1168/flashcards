@@ -31,9 +31,10 @@ export function addDeck (deck) {
  * Adds a specific card
  * @returns {{type: string}}
  */
-export function addCard() {
+export function addCard(send) {
   return {
-    type: ADD_CARD
+    type: ADD_CARD,
+    send,
   }
 }
 

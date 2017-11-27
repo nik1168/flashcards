@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import {white} from '../utils/colors';
 import {AppLoading} from 'expo';
-import {getDecks, clearStorage} from "../utils/api";
+import {getDecks} from "../utils/api";
 import {receiveDecks} from "../actions/index";
 
 class Decks extends Component {

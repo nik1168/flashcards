@@ -1,21 +1,24 @@
-import { RECEIVE_DECKS, ADD_CARD,ADD_DECK } from '../actions'
+import {ADD_CARD, ADD_DECK, RECEIVE_DECKS} from '../actions'
 
-function decks (state = {}, action) {
+function decks(state = {}, action) {
   switch (action.type) {
     case RECEIVE_DECKS :
       return {
         ...state,
         ...action.decks,
-      }
+      };
     case ADD_DECK :
       return {
         ...state,
         ...action.deck
-      }
+      };
     case ADD_CARD :
-      return {
+      let {send} = action;
+      let copyState = {
         ...state
-      }
+      };
+      copyState[send.deck].questions.push(send.card);
+      return copyState;
     default :
       return state
   }

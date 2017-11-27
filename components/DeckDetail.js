@@ -1,50 +1,62 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import TextButton from './TextButton';
-import {getDeck} from "../utils/api";
-import {getSingleDeck} from "../actions/index";
-import {purple,white} from "../utils/colors";
+import {purple, white} from "../utils/colors";
 
-function Btn ({ onPress,text }) {
-  return (
-    <TouchableOpacity
-      style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
-      onPress={onPress}>
-      <Text style={styles.submitBtnText}>{text}</Text>
-    </TouchableOpacity>
-  )
-}
-
+/**
+ * Deck Detail
+ */
 class DeckDetail extends Component {
-  // componentDidMount() {
-  //   const {dispatch,deckId,dispatch} = this.props;
-  //   getDeck().then((deck)=>dispatch(getSingleDeck(deck)))
-  // }
+
+  /**
+   * Go to Add card component
+   */
   addCard = () => {
+    const {navigate} = this.props.navigation;
     let {deck} = this.props;
-    this.props.navigation.navigate(
+    navigate(
       'AddCard',
+      {
+        title: deck.title,
+        onGoBack: this.onGoBack
+      }
+    )
+  };
+
+  /**
+   * Go to quiz component
+   */
+  startQuiz = () => {
+    const {navigate} = this.props.navigation;
+    let {deck} = this.props;
+    navigate(
+      'Quiz',
       {title: deck.title}
     )
   };
-  startQuiz = () => {
-    console.log("start quiz");
-  };
-  static navigationOptions = ({ navigation }) => {
+
+  /**
+   * Navigation options
+   * @param navigation
+   * @returns {{title: string}}
+   */
+  static navigationOptions = ({navigation}) => {
     const {deckId} = navigation.state.params;
     return {
-      title: deckId+''
+      title: deckId + ''
     }
   };
-  reset = () => {
 
+  /**
+   * On go back call back
+   */
+  onGoBack = () => {
+    this.forceUpdate() //re render component
   };
-  // shouldComponentUpdate (nextProps) {
-  //   // return nextProps.metrics !== null && !nextProps.metrics.today
-  // }
+
   render() {
-   let {deck} = this.props;
+    let {deck} = this.props;
     return (
       <View style={styles.container}>
         <Text>
@@ -57,10 +69,10 @@ class DeckDetail extends Component {
             </Text>
           )
         }
-        <Btn onPress={this.addCard} text="Add Card"/>
+        <TextButton onPress={this.addCard} children="Add Card"/>
         {
           deck.questions.length > 0 && (
-            <Btn onPress={this.startQuiz} text="Start Quiz"/>
+            <TextButton onPress={this.startQuiz} children="Start Quiz"/>
           )
         }
       </View>
@@ -112,32 +124,19 @@ const styles = StyleSheet.create({
   }
 });
 
-submit = () => {
-  //Go to home to reload all the new decks added
-  this.toHome()
-
-  //Submit deck from api
-};
-toHome = () => {
-  this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
-};
-
-function mapStateToProps (state, { navigation }) {
-  const { deckId } = navigation.state.params;
+/**
+ * Map state to props
+ * @param state
+ * @param navigation
+ * @returns {{deck: *}}
+ */
+function mapStateToProps(state, {navigation}) {
+  const {deckId} = navigation.state.params;
   return {
-    deck : state[deckId]
-  }
-}
-
-function mapDispatchToProps (dispatch, { navigation }) {
-  const { deckId } = navigation.state.params;
-  return {
-    getDeck: (deckId) => dispatch(getDeck(deckId)),
-    goBack: () => navigation.goBack(),
+    deck: state[deckId]
   }
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  mapStateToProps
 )(DeckDetail)
