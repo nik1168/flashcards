@@ -3,7 +3,7 @@ import {StyleSheet, TextInput, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {connect} from 'react-redux';
 import {addCard} from '../actions';
-import {purple, white} from '../utils/colors';
+import {purple, white, blue} from '../utils/colors';
 import {addCardToDeck} from "../utils/api";
 import SubmitBtn from "./SubmitButton";
 
@@ -29,15 +29,21 @@ class AddCard extends Component {
   submit = () => {
     let {deck} = this.props; // Get deck from props
     const {question, answer} = this.state; //Question and answer from state
-    let card = {question, answer};
-    addCardToDeck(deck, card)
-      .then(() => {
-        //Go to home to reload all the new decks added
-        let send = {deck, card};
-        this.props.dispatch(addCard(send));
-        this.props.navigation.state.params.onGoBack();
-        this.toHome()
-      })
+    if (question.length > 0 && answer.length > 0) {
+      let card = {question, answer};
+      addCardToDeck(deck, card)
+        .then(() => {
+          //Go to home to reload all the new decks added
+          let send = {deck, card};
+          this.props.dispatch(addCard(send));
+          this.props.navigation.state.params.onGoBack();
+          this.toHome()
+        })
+    }
+    else {
+      alert('Please fill in all fields');
+    }
+
   };
 
   /**
@@ -53,25 +59,37 @@ class AddCard extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(question) => this.setState({question})}
-          value={this.state.question}
-          placeholder="Question"
-        />
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(answer) => this.setState({answer})}
-          value={this.state.answer}
-          placeholder="Answer"
-        />
-        <SubmitBtn onPress={this.submit}/>
+        <View>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(question) => this.setState({question})}
+            value={this.state.question}
+            placeholder="Question"
+          />
+        </View>
+        <View style={{paddingTop: 20}}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(answer) => this.setState({answer})}
+            value={this.state.answer}
+            placeholder="Answer"
+          />
+        </View>
+        <View style={{paddingTop: 20}}>
+          <SubmitBtn onPress={this.submit}/>
+        </View>
+
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -83,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iosSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     borderRadius: 7,
     height: 45,
@@ -91,7 +109,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   AndroidSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,

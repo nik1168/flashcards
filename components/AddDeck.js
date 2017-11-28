@@ -3,7 +3,7 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {connect} from 'react-redux';
 import {addDeck} from '../actions';
-import {purple, white} from '../utils/colors';
+import {purple, white, blue} from '../utils/colors';
 import {saveDeckTitle} from "../utils/api";
 import SubmitBtn from "./SubmitButton";
 
@@ -26,18 +26,24 @@ class AddDeck extends Component {
     const {dispatch} = this.props; //get dispatch from props
     //Submit deck from api
     const {title} = this.state;
-    let deck = {
-      title,
-      questions: []
-    };
-    saveDeckTitle({deck, title})
-      .then(() => {
-        dispatch(addDeck({
-          [title]: deck
-        }));
-        //Go to deck detail
-        this.toDeck(title);
-      })
+    if (title.length > 0) {
+      let deck = {
+        title,
+        questions: []
+      };
+      saveDeckTitle({deck, title})
+        .then(() => {
+          dispatch(addDeck({
+            [title]: deck
+          }));
+          //Go to deck detail
+          this.toDeck(title);
+        })
+    }
+    else {
+      alert('Name empty');
+    }
+
   };
 
   /**
@@ -53,22 +59,30 @@ class AddDeck extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>
+        <Text style={styles.title}>
           What is the title of your new deck??
         </Text>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(title) => this.setState({title})}
-          value={this.state.title}
-          placeholder="Deck Title"
-        />
-        <SubmitBtn onPress={this.submit}/>
+        <View style={{paddingTop: 20}}>
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(title) => this.setState({title})}
+            value={this.state.title}
+            placeholder="Deck Title"
+          />
+        </View>
+        <View style={{paddingTop: 20}}>
+          <SubmitBtn onPress={this.submit}/>
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 30,
+    alignSelf: 'center'
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -80,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iosSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     borderRadius: 7,
     height: 45,
@@ -88,7 +102,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   AndroidSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,

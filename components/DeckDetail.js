@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import TextButton from './TextButton';
-import {purple, white} from "../utils/colors";
+import {gray, purple, white, blue} from "../utils/colors";
 
 /**
  * Deck Detail
@@ -58,33 +58,48 @@ class DeckDetail extends Component {
   render() {
     let {deck} = this.props;
     return (
-      <View style={styles.container}>
-        <Text>
+      <View style={[styles.container]}>
+        <Text style={styles.title}>
           {deck.title}
         </Text>
         {
           deck.questions.length > 0 && (
-            <Text>
+            <Text style={styles.subtitle}>
               {deck.questions.length} card/s
             </Text>
           )
         }
-        <TextButton onPress={this.addCard} children="Add Card"/>
-        {
-          deck.questions.length > 0 && (
-            <TextButton onPress={this.startQuiz} children="Start Quiz"/>
-          )
-        }
+        <View style={styles.buttonView}>
+          <TextButton onPress={this.addCard} children="Add Card"/>
+        </View>
+        <View style={styles.buttonView}>
+          {
+            deck.questions.length > 0 && (
+              <TextButton onPress={this.startQuiz} children="Start Quiz"/>
+            )
+          }
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 50,
+    alignSelf: 'center'
+  },
+  subtitle: {
+    color: gray,
+    fontSize: 20,
+    alignSelf: 'center'
+  },
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: white
+    backgroundColor: white,
+    // alignItems: 'center',
+    // justifyContent : 'space-around'
   },
   row: {
     flexDirection: 'row',
@@ -92,15 +107,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iosSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     borderRadius: 7,
     height: 45,
     marginLeft: 40,
     marginRight: 40,
+    color: white
   },
   AndroidSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,
@@ -121,6 +137,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 30,
     marginRight: 30,
+  },
+  buttonView: {
+    paddingTop: 30
   }
 });
 

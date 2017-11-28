@@ -75,9 +75,15 @@ class Quiz extends Component {
             <View key={index}>
               {
                 (show === question.id) && (
-                  <View style={styles.item}>
-                    <QuizDetail quiz={question} handleAnswer={this.handleClick} length={mappedQuestions.length}/>
+                  <View>
+                    <View>
+                      <QuizDetail quiz={question} handleAnswer={this.handleClick} length={mappedQuestions.length}/>
+                    </View>
+                    <View>
+
+                    </View>
                   </View>
+
                 )
               }
             </View>
@@ -85,20 +91,29 @@ class Quiz extends Component {
         }
         {
           result && (
-            <View>
-              <Text>Results</Text>
-              <Text>Correct Answers</Text>
-              <Text>
+            <View style={{padding: 10}}>
+              <Text style={styles.title}>Correct Answers</Text>
+              <Text style={styles.title}>
                 {
-                  correct + '/' + questions.length
+                  // correct + '/' + questions.length
+                  // ((correct/questions.length)*100)+'%'
+                  Math.round(((correct / questions.length) * 100 * 100) / 100) + '%'
                 }
               </Text>
-              <TextButton onPress={() => {
-                this.restartQuiz()
-              }} children="Restart Quiz"/>
-              <TextButton onPress={() => {
-                this.backToDeck()
-              }} children="Back to Deck"/>
+              <View>
+                <View style={{paddingTop: 20}}>
+                  <TextButton onPress={() => {
+                    this.restartQuiz()
+                  }} children="Restart Quiz"/>
+                </View>
+                <View style={{paddingTop: 20}}>
+                  <TextButton onPress={() => {
+                    this.backToDeck()
+                  }} children="Back to Deck"/>
+                </View>
+
+              </View>
+
             </View>
           )
         }
@@ -109,26 +124,9 @@ class Quiz extends Component {
 }
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: white,
-    borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    padding: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 17,
-    justifyContent: 'center',
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0, 0, 0, 0.24)',
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-  },
-  noDataText: {
-    fontSize: 20,
-    paddingTop: 20,
-    paddingBottom: 20
+  title: {
+    fontSize: 30,
+    alignSelf: 'center'
   }
 });
 

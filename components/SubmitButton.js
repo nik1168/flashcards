@@ -1,6 +1,6 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {purple, white} from '../utils/colors';
+import {purple, white, blue} from '../utils/colors';
 
 /**
  * @description Handle submit button
@@ -19,10 +19,10 @@ export default function SubmitBtn({onPress}) {
 const styles = StyleSheet.create({
   reset: {
     textAlign: 'center',
-    color: purple,
+    color: blue,
   },
   iosSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     borderRadius: 7,
     height: 45,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   AndroidSubmitBtn: {
-    backgroundColor: purple,
+    backgroundColor: blue,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,

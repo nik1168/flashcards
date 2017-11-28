@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
-import {white} from '../utils/colors';
+import {gray, white, blue} from '../utils/colors';
 import {AppLoading} from 'expo';
 import {getDecks} from "../utils/api";
 import {receiveDecks} from "../actions/index";
@@ -38,25 +38,29 @@ class Decks extends Component {
     }
     return (
       <View>
-        {
-          keys.map((val, index) => (
-            <TouchableOpacity key={index} onPress={() =>
-              this.props.navigation.navigate(
-                'DeckDetail',
-                {deckId: decks[val]['title']}
-              )
-            }>
-              <View style={styles.item}>
-                <Text>
-                  {decks[val]['title']}
-                </Text>
-                <Text>
-                  Questions : {decks[val]['questions'].length}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))
-        }
+        <ScrollView>
+          {
+            keys.map((val, index) => (
+
+              <TouchableOpacity key={index} onPress={() =>
+                this.props.navigation.navigate(
+                  'DeckDetail',
+                  {deckId: decks[val]['title']}
+                )
+              }>
+                <View style={styles.item}>
+                  <Text style={styles.deckTitle}>
+                    {decks[val]['title']}
+                  </Text>
+                  <Text style={styles.textQuestion}>
+                    {decks[val]['questions'].length} Cards
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+            ))
+          }
+        </ScrollView>
       </View>
     )
   }
@@ -65,12 +69,16 @@ class Decks extends Component {
 const styles = StyleSheet.create({
   item: {
     backgroundColor: white,
-    borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    padding: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 17,
+    // borderRadius: Platform.OS === 'ios' ? 16 : 2,
+    padding: 30,
+    // marginLeft: 10,
+    // marginRight: 10,
+    marginTop: 2,
     justifyContent: 'center',
+    alignItems: 'center',
+
+    // alignSelf: 'center',
+    // width : '100%',
     shadowRadius: 3,
     shadowOpacity: 0.8,
     shadowColor: 'rgba(0, 0, 0, 0.24)',
@@ -83,6 +91,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 20,
     paddingBottom: 20
+  },
+  textQuestion: {
+    color: gray,
+  },
+  deckTitle: {
+    fontSize: 18,
   }
 });
 
